@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Рыбная Точка</title>
+    <script src="https://st.max.ru/js/max-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #2E4554;
+            --navy-light: #3F5A69;
+            --beige: #E8E5E1;
+            --gold: #c5a059;
+            --white: #FFFFFF;
+            --text-dark: #2E4554;
+            --serif: 'Playfair Display', serif;
+            --sans: 'Montserrat', sans-serif;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--navy);
+            color: var(--white);
+            font-family: var(--sans);
+            overflow: hidden;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .container {
+            height: calc(100vh - 75px);
+            overflow-y: auto;
+            padding: 0 15px;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .serif { font-family: var(--serif); }
+
+        .brand-header { text-align: center; padding: 25px 0 10px; }
+        .brand-header h1 {
+            font-family: var(--serif);
+            font-size: 24px;
+            margin: 0;
+            letter-spacing: 3px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+        .brand-header span { color: var(--gold); }
+
+        .hero-block {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            height: 180px;
+            margin-bottom: 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity .5s ease;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 18px;
+            box-sizing: border-box;
+        }
+
+        .hero-slide::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(46,69,84,0.12) 0%, rgba(46,69,84,0.72) 100%);
+        }
+
+        .hero-slide.active { opacity: 1; }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 85%;
+        }
+
+        .hero-title {
+            font-family: var(--serif);
+            font-size: 22px;
+            line-height: 1.15;
+            margin: 0 0 6px;
+        }
+
+        .hero-text {
+            font-size: 12px;
+            line-height: 1.4;
+            opacity: 0.95;
+        }
+
+        .hero-dots {
+            position: absolute;
+            right: 14px;
+            bottom: 14px;
+            display: flex;
+            gap: 6px;
+            z-index: 3;
+        }
+
+        .hero-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+        }
+
+        .hero-dot.active { background: var(--gold); }
+
+        .info-section {
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 26px;
+            padding: 18px 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.14);
+        }
+
+        .info-section h3 {
+            margin: 0 0 10px;
+            font-family: var(--serif);
+            font-size: 24px;
+        }
+
+        .info-section p,
+        .info-section li {
+            font-size: 12px;
+            line-height: 1.55;
+            opacity: 0.95;
+        }
+
+        .info-section ol {
+            padding-left: 18px;
+            margin: 0;
+        }
+
+        .cats-sticky {
+            position: sticky;
+            top: 0;
+            background: var(--navy);
+            z-index: 100;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .cats-list {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 5px 15px;
+            scrollbar-width: none;
+        }
+
+        .cat-btn {
+            white-space: nowrap;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--white);
+            opacity: 0.4;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .cat-btn.active {
+            opacity: 1;
+            color: var(--gold);
+            background: rgba(197,160,89,0.15);
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding-bottom: 100px;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: var(--beige);
+            border-radius: 20px;
+            padding: 10px;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        .p-img-wrap {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 15px;
+            margin-bottom: 8px;
+            background: #ddd;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .p-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .p-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(46,69,84,0.65);
+            background: linear-gradient(135deg, #ece9e4 0%, #dcd6ce 100%);
+        }
+
+        .p-name {
+            font-family: var(--serif);
+            font-size: 13px;
+            font-weight: 600;
+            min-height: 34px;
+            overflow: hidden;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .p-pack {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            min-height: 22px;
+        }
+
+        .p-desc {
+            font-size: 10px;
+            line-height: 1.3;
+            opacity: 0.85;
+            min-height: 50px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+
+        .p-price {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .add-btn {
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 75px;
+            background: var(--white);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-radius: 25px 25px 0 0;
+            z-index: 1000;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.3);
+        }
+
+        .nav-item {
+            color: var(--navy);
+            text-align: center;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            opacity: 0.4;
+            position: relative;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .nav-item svg {
+            display: block;
+            margin: 0 auto 4px;
+            width: 22px;
+            height: 22px;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--gold);
+            color: var(--navy);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            background: var(--beige);
+            padding: 12px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+            align-items: center;
+        }
+
+        .cart-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #ddd;
+        }
+
+        .cart-img-placeholder {
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ece9e4 0%, #dcd6ce 100%);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            font-size:9px;
+            color: rgba(46,69,84,0.6);
+            padding:4px;
+            box-sizing:border-box;
+        }
+
+        .cart-ctrl {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1.5px solid var(--navy);
+            background: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .profile-card {
+            background: var(--navy-light);
+            border-radius: 30px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            background: var(--gold);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: var(--navy);
+            font-family: var(--serif);
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .status-badge {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 20px;
+            background: rgba(197,160,89,0.1);
+            color: var(--gold);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .checkout-form {
+            margin-top: 30px;
+            padding-bottom: 120px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            font-family: var(--sans);
+            resize: none;
+        }
+
+        textarea { min-height: 90px; }
+        select option { color: #000; }
+
+        .btn-order-final {
+            width: 100%;
+            padding: 20px;
+            background: var(--gold);
+            color: var(--navy);
+            border: none;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .secondary-btn {
+            width: 100%;
+            padding: 16px;
+            background: rgba(197,160,89,0.12);
+            color: var(--gold);
+            border: 1px solid rgba(197,160,89,0.25);
+            border-radius: 18px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 12px;
+            box-sizing: border-box;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin: 24px 0 12px;
+            font-family: var(--serif);
+        }
+
+        .history-wrap { padding-bottom: 120px; }
+
+        .history-card {
+            background: var(--beige);
+            color: var(--text-dark);
+            border-radius: 20px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .history-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .history-id {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .history-date {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        .history-total {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-top: 8px;
+        }
+
+        .history-status {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 12px;
+            border-radius: 14px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: rgba(46,69,84,0.08);
+            color: var(--navy);
+        }
+
+        .bonus-box {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .bonus-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bonus-value {
+            font-size: 24px;
+            font-family: var(--serif);
+            color: var(--gold);
+        }
+
+        .bonus-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            opacity: .7;
+            letter-spacing: .6px;
+        }
+
+        .ref-link-box {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 16px;
+            background: rgba(46,69,84,0.07);
+            word-break: break-all;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .ref-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .ref-mini {
+            background: rgba(46,69,84,0.07);
+            border-radius: 14px;
+            padding: 12px;
+        }
+
+        .ref-mini .v {
+            display: block;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-top: 4px;
+        }
+
+        .ref-mini .l {
+            font-size: 10px;
+            text-transform: uppercase;
+            opacity: .65;
+        }
+
+        .toggle-bonus {
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 12px 14px;
+            margin-top: 10px;
+            gap: 12px;
+        }
+
+        .toggle-bonus input {
+            width: auto;
+            margin: 0;
+            transform: scale(1.1);
+        }
+
+        .pickup-box {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .pickup-title {
+            font-size: 18px;
+            font-family: var(--serif);
+            margin-bottom: 10px;
+            color: var(--gold);
+        }
+
+        .pickup-line {
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 4px;
+        }
+
+        .pickup-confirm-box {
+            font-size: 12px;
+            line-height: 1.6;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 14px;
+            margin-top: 6px;
+        }
+
+        .map-wrap {
+            margin-top: 12px;
+            border-radius: 18px;
+            overflow: hidden;
+            height: 240px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .map-wrap iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 2000;
+            padding: 14px;
+            box-sizing: border-box;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-card {
+            width: 100%;
+            max-width: 520px;
+            max-height: 92vh;
+            overflow-y: auto;
+            background: var(--beige);
+            color: var(--text-dark);
+            border-radius: 28px;
+            padding: 14px;
+            box-sizing: border-box;
+        }
+
+        .modal-img-wrap {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #ddd;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .modal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-close {
+            position: sticky;
+            top: 0;
+            margin-left: auto;
+            display: block;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(46,69,84,0.1);
+            color: var(--navy);
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .modal-title {
+            font-family: var(--serif);
+            font-size: 22px;
+            line-height: 1.2;
+            margin: 0 0 6px;
+        }
+
+        .modal-pack {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: .5px;
+            margin-bottom: 8px;
+        }
+
+        .modal-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        .modal-text {
+            font-size: 13px;
+            line-height: 1.55;
+            margin-bottom: 12px;
+            white-space: pre-line;
+        }
+
+        .modal-kbju {
+            background: rgba(46,69,84,0.06);
+            border-radius: 16px;
+            padding: 12px;
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: pre-line;
+            margin-bottom: 12px;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 30px 0 120px;
+            opacity: .75;
+            display: none;
+        }
+
+        .view { display: none; }
+        .view.active { display: block; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="shop-view" class="view active">
+        <div class="brand-header"><h1>Рыбная <span>Точка</span></h1></div>
+
+        <div class="hero-block" id="hero-block"></div>
+
+        <div class="info-section">
+            <h3>О нас</h3>
+            <p>Мы искренне рады каждому участнику нашего сообщества.</p>
+            <ol>
+                <li>Продукцию крупных и проверенных производителей по ценам ниже чем в магазинах и продукцию небольших семейных компаний, для которых репутация дороже денег.</li>
+                <li>Наши цены ниже чем в привычных для вас магазинах. У нас заключены прямые договора поставок с производителями.</li>
+                <li>Свежие сроки производства гарантированы тем что продукция закупается напрямую с заводов и под ваши заказы.</li>
+            </ol>
+            <p style="margin-top:10px;">Мы всегда открыты к вашим комментариям и обратной связи. Надеемся вам будет полезно и уютно с нами.</p>
+        </div>
+
+        <div class="cats-sticky"><div class="cats-list" id="cat-nav"></div></div>
+        <div class="loader" id="products-loader">Загрузка каталога...</div>
+        <div class="grid" id="product-grid"></div>
+    </div>
+
+    <div id="cart-view" class="view">
+        <h2 class="serif" style="font-size:30px; margin:20px 0;">Ваш заказ</h2>
+        <div id="cart-list"></div>
+        <div id="cart-empty" style="text-align:center; margin-top:80px; opacity:0.5;">Корзина пуста</div>
+
+        <div id="bonus-toggle-wrap" style="display:none;">
+            <div class="toggle-bonus">
+                <div>
+                    <div style="font-size:12px; font-weight:600;">Использовать бонусы</div>
+                    <div style="font-size:11px; opacity:.65;" id="bonus-help-text">Доступно 0 бонусных рублей</div>
+                </div>
+                <input type="checkbox" id="use-bonus-checkbox" onchange="updateCartUI()">
+            </div>
+        </div>
+
+        <div id="checkout-block" style="display:none;" class="checkout-form">
+            <div class="pickup-box">
+                <div class="pickup-title">Самовывоз</div>
+                <div class="pickup-line"><strong>Адрес:</strong> г. Тула, Щегловская засека, 25</div>
+                <div class="pickup-line"><strong>Выдача заказов:</strong></div>
+                <div class="pickup-line">Четверг, пятница с 16:00 до 20:00</div>
+                <div class="pickup-line">Суббота с 9:00 до 13:00</div>
+                <div class="map-wrap">
+                    <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%B3.%20%D0%A2%D1%83%D0%BB%D0%B0%2C%20%D0%A9%D0%B5%D0%B3%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%B0%D1%8F%20%D0%B7%D0%B0%D1%81%D0%B5%D0%BA%D0%B0%2C%2025&z=16" allowfullscreen="true"></iframe>
+                </div>
+            </div>
+
+            <input type="tel" id="f-phone" placeholder="Телефон: +7...">
+            <select id="f-pickup-time">
+                <option value="">Выберите время самовывоза</option>
+            </select>
+            <textarea id="f-comment" placeholder="Комментарий к заказу"></textarea>
+
+            <div class="pickup-confirm-box">
+                После оформления заказа вам придёт номер заказа. Забрать заказ можно по адресу <strong>г. Тула, Щегловская засека, 25</strong> в выбранное вами время.
+            </div>
+
+            <button class="btn-order-final" onclick="finalizeOrder()">Оформить заказ</button>
+        </div>
+    </div>
+
+    <div id="profile-view" class="view">
+        <h2 class="serif" style="font-size:30px; margin:20px 0;">Профиль</h2>
+
+        <div class="profile-card">
+            <div class="avatar" id="avatar">?</div>
+            <div id="user-name" class="serif" style="font-size:24px;">MAX Клиент</div>
+            <div id="user-id" style="opacity:0.6; font-size:13px; margin-top:5px;">@username</div>
+            <div class="status-badge" id="user-status">MAX Premium Guest</div>
+            <div id="user-extra"></div>
+        </div>
+
+        <h3 class="section-title">Реферальная программа</h3>
+        <div class="bonus-box">
+            <div class="bonus-top">
+                <div>
+                    <div class="bonus-label">Бонусный баланс</div>
+                    <div class="bonus-value" id="bonus-balance">0 ₽</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="bonus-label">Ваш код</div>
+                    <div style="font-size:16px; font-weight:700; color:var(--gold);" id="ref-code">—</div>
+                </div>
+            </div>
+
+            <div class="ref-link-box" id="ref-link-box">—</div>
+            <button class="secondary-btn" onclick="copyReferralLink()">Скопировать ссылку</button>
+            <button class="secondary-btn" onclick="shareReferralLink()">Поделиться ссылкой</button>
+
+            <div class="ref-row">
+                <div class="ref-mini">
+                    <span class="l">Приглашено</span>
+                    <span class="v" id="ref-invited-count">0</span>
+                </div>
+                <div class="ref-mini">
+                    <span class="l">Начислено бонусов</span>
+                    <span class="v" id="ref-earned-total">0 ₽</span>
+                </div>
+            </div>
+
+            <div style="margin-top:12px; font-size:12px; line-height:1.5; opacity:.9;">
+                Отправляй приглашение в магазин Рыбная Точка друзьям и знакомым и получай 3% от их первого заказа. 1 бонусный рубль равен 1 рублю.
+            </div>
+        </div>
+
+        <div class="admin-panel" id="admin-panel" style="display:none;">
+            <h3 class="section-title">Действия</h3>
+            <button class="secondary-btn" onclick="exportOrdersCSV()">Скачать CSV</button>
+            <button class="secondary-btn" onclick="openAdminPanel()">Открыть админку</button>
+        </div>
+
+        <div class="history-wrap">
+            <h3 class="section-title">История заказов</h3>
+            <div id="orders-history-empty" style="opacity:0.5; margin-top:15px;">У вас пока нет заказов</div>
+            <div id="orders-history-list"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="product-modal" onclick="closeProductModal(event)">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeProductModal(event)">×</button>
+        <div class="modal-img-wrap" id="modal-img-wrap"></div>
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-pack" id="modal-pack"></div>
+        <div class="modal-price" id="modal-price"></div>
+        <div class="modal-text" id="modal-desc"></div>
+        <div class="modal-kbju" id="modal-kbju"></div>
+        <button class="btn-order-final" id="modal-add-btn">Добавить в корзину</button>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('shop-view', this)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        Меню
+    </div>
+    <div class="nav-item" onclick="switchTab('cart-view', this)">
+        <div class="badge" id="cart-badge">0</div>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        Заказ
+    </div>
+    <div class="nav-item" onclick="switchTab('profile-view', this)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+        Профиль
+    </div>
+</nav>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+
+function normalizeBackendUrl(value) {
+    return String(value || "").trim().replace(/\/+$/, "");
+}
+
+function detectBackendUrl() {
+    const queryBackend = normalizeBackendUrl(urlParams.get("backend"));
+    const storedBackend = normalizeBackendUrl(localStorage.getItem("FISH_BACKEND_URL"));
+    const globalBackend = normalizeBackendUrl(window.BACKEND_URL);
+    const metaBackend = normalizeBackendUrl(document.documentElement.dataset.backendUrl);
+    const fallbackBackend = "https://mao-unhesitative-greedily.ngrok-free.dev";
+    const result = queryBackend || globalBackend || metaBackend || storedBackend || fallbackBackend;
+    localStorage.setItem("FISH_BACKEND_URL", result);
+    return result;
+}
+
+const BACKEND_URL = detectBackendUrl();
+
+const FRONTEND_BASE_URL = (() => {
+    const href = window.location.href.split("#")[0].split("?")[0];
+    return href.substring(0, href.lastIndexOf("/") + 1);
+})();
+
+const MINIAPP_PUBLIC_URL = window.location.origin + window.location.pathname;
+
+const PICKUP_SLOTS = [
+    "Четверг 16:00–17:00","Четверг 17:00–18:00","Четверг 18:00–19:00","Четверг 19:00–20:00",
+    "Пятница 16:00–17:00","Пятница 17:00–18:00","Пятница 18:00–19:00","Пятница 19:00–20:00",
+    "Суббота 09:00–10:00","Суббота 10:00–11:00","Суббота 11:00–12:00","Суббота 12:00–13:00"
+];
+
+const STORAGE_CART_KEY = "max_final_cart";
+const STORAGE_REF_KEY = "fish_point_ref_system_v1";
+const REF_RATE = 0.03;
+
+const ADMIN_IDS = ["205428118"];
+const ADMIN_USERNAMES = ["your_admin_username"];
+
+const app = window.WebApp || window.Telegram?.WebApp || null;
+if (app && typeof app.ready === "function") {
+    try { app.ready(); } catch (e) {}
+}
+
+const HERO_BANNERS = [
+    {
+        image: "banner-1.jpg",
+        title: "Свежая рыба и морепродукты",
+        text: "Прямые поставки, честные цены и удобный заказ в миниприложении."
+    },
+    {
+        image: "banner-2.jpg",
+        title: "Премиальное качество на каждый день",
+        text: "Продукция крупных производителей и семейных компаний с безупречной репутацией."
+    },
+    {
+        image: "banner-3.jpg",
+        title: "Заказывайте для дома и праздника",
+        text: "Стейки, икра, морепродукты, полуфабрикаты и деликатесы в одном каталоге."
+    }
+];
+
+let PRODUCTS = [];
+let cart = JSON.parse(localStorage.getItem(STORAGE_CART_KEY) || "[]");
+let currentCat = "Все";
+let currentUser = null;
+let currentProduct = null;
+let heroIndex = 0;
+let currentReferralCode = null;
+let cartTracked = false;
+
+function normalizeSpaces(text) {
+    return String(text || "").replace(/\s+/g, " ").trim();
+}
+
+function slugCode(id) {
+    return "FP" + String(id).replace(/[^0-9A-Za-z]/g, "").slice(-8).toUpperCase();
+}
+
+function getRefState() {
+    return JSON.parse(localStorage.getItem(STORAGE_REF_KEY) || '{"users":{},"links":{},"claims":{}}');
+}
+
+function setRefState(state) {
+    localStorage.setItem(STORAGE_REF_KEY, JSON.stringify(state));
+}
+
+function showAlert(message) {
+    alert(message);
+}
+
+function safeImpact(type = "medium") {
+    try { app?.HapticFeedback?.impactOccurred?.(type, false); } catch (e) {}
+}
+
+function safeSelection() {
+    try { app?.HapticFeedback?.selectionChanged?.(false); } catch (e) {}
+}
+
+function safeNotify(type = "success") {
+    try { app?.HapticFeedback?.notificationOccurred?.(type, false); } catch (e) {}
+}
+
+function escapeHTML(str) {
+    return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function normalizeImagePath(src) {
+    return String(src || "")
+        .trim()
+        .replace(/^\.?\//, "")
+        .replace(/^\/+/, "");
+}
+
+function ensureReferralProfile(user) {
+    const state = getRefState();
+    if (!state.users[user.id]) {
+        const code = slugCode(user.id + Date.now().toString(36));
+        state.users[user.id] = {
+            user_id: user.id,
+            code,
+            bonus_balance: 0,
+            bonus_earned_total: 0,
+            invited_count: 0,
+            referred_users: [],
+            first_order_done: false
+        };
+        state.links[code] = user.id;
+        setRefState(state);
+    }
+    return state.users[user.id];
+}
+
+function getCurrentReferralProfile() {
+    if (!currentUser) return null;
+    return getRefState().users[currentUser.id] || null;
+}
+
+function getReferralParam() {
+    const url = new URL(window.location.href);
+    return normalizeSpaces(url.searchParams.get("ref"));
+}
+
+function maybeSaveReferralAttribution() {
+    const refCode = getReferralParam();
+    if (!refCode || !currentUser) return;
+
+    const state = getRefState();
+    const ownerId = state.links[refCode];
+
+    if (!ownerId) return;
+    if (String(ownerId) === String(currentUser.id)) return;
+
+    state.claims[currentUser.id] = refCode;
+    setRefState(state);
+    currentReferralCode = refCode;
+}
+
+function applyReferralRewardIfNeeded(orderTotal) {
+    if (!currentUser) return;
+
+    const state = getRefState();
+    const myProfile = state.users[currentUser.id];
+
+    if (!myProfile || myProfile.first_order_done) {
+        if (myProfile) {
+            myProfile.first_order_done = true;
+            state.users[currentUser.id] = myProfile;
+            setRefState(state);
+        }
+        return;
+    }
+
+    const refCode = state.claims[currentUser.id];
+    if (!refCode) {
+        myProfile.first_order_done = true;
+        state.users[currentUser.id] = myProfile;
+        setRefState(state);
+        return;
+    }
+
+    const ownerId = state.links[refCode];
+    if (!ownerId || String(ownerId) === String(currentUser.id)) {
+        myProfile.first_order_done = true;
+        state.users[currentUser.id] = myProfile;
+        setRefState(state);
+        return;
+    }
+
+    const referrer = state.users[ownerId];
+    if (!referrer) {
+        myProfile.first_order_done = true;
+        state.users[currentUser.id] = myProfile;
+        setRefState(state);
+        return;
+    }
+
+    const reward = Math.floor(orderTotal * REF_RATE);
+    if (reward > 0) {
+        referrer.bonus_balance += reward;
+        referrer.bonus_earned_total += reward;
+
+        if (!referrer.referred_users.includes(currentUser.id)) {
+            referrer.referred_users.push(currentUser.id);
+            referrer.invited_count = referrer.referred_users.length;
+        }
+
+        state.users[ownerId] = referrer;
+    }
+
+    myProfile.first_order_done = true;
+    state.users[currentUser.id] = myProfile;
+    delete state.claims[currentUser.id];
+    setRefState(state);
+}
+
+function getUserBonusBalance() {
+    const profile = getCurrentReferralProfile();
+    return profile ? Number(profile.bonus_balance || 0) : 0;
+}
+
+function getCartTotalRaw() {
+    return cart.reduce((s, i) => s + (Number(i.price) * Number(i.qty)), 0);
+}
+
+function getBonusToUse() {
+    const cb = document.getElementById("use-bonus-checkbox");
+    if (!cb || !cb.checked) return 0;
+    return Math.min(getUserBonusBalance(), getCartTotalRaw());
+}
+
+function spendBonuses(amount) {
+    if (!amount || amount <= 0 || !currentUser) return;
+
+    const state = getRefState();
+    const profile = state.users[currentUser.id];
+    if (!profile) return;
+
+    profile.bonus_balance = Math.max(0, Number(profile.bonus_balance || 0) - amount);
+    state.users[currentUser.id] = profile;
+    setRefState(state);
+}
+
+function buildReferralLink() {
+    const profile = getCurrentReferralProfile();
+    if (!profile) return "";
+
+    const url = new URL(MINIAPP_PUBLIC_URL);
+    url.search = "";
+    url.hash = "";
+    url.searchParams.set("ref", profile.code);
+
+    return url.toString();
+}
+
+function resolveBannerImage(src) {
+    const value = normalizeImagePath(src);
+    if (!value) return "";
+
+    if (
+        value.startsWith("http://") ||
+        value.startsWith("https://") ||
+        value.startsWith("data:")
+    ) {
+        return value;
+    }
+
+    return new URL(value, FRONTEND_BASE_URL).toString();
+}
+
+function isBareUploadedFilename(value) {
+    return /^[^/]+\.(jpg|jpeg|png|webp|gif)$/i.test(String(value || "").trim());
+}
+
+function resolveImage(src) {
+    const value = String(src || "").trim();
+    if (!value) return "";
+
+    if (
+        value.startsWith("http://") ||
+        value.startsWith("https://") ||
+        value.startsWith("data:")
+    ) {
+        return value;
+    }
+
+    if (value.startsWith("/uploads/")) {
+        return `${BACKEND_URL}${value}`;
+    }
+
+    if (value.startsWith("uploads/")) {
+        return `${BACKEND_URL}/${value}`;
+    }
+
+    if (value.startsWith("/static/")) {
+        return `${BACKEND_URL}${value}`;
+    }
+
+    if (value.startsWith("static/")) {
+        return `${BACKEND_URL}/${value}`;
+    }
+
+    return new URL(normalizeImagePath(value), FRONTEND_BASE_URL).toString();
+}
+
+function resolveImageFallback(src) {
+    const value = normalizeImagePath(src);
+    if (!value) return "";
+
+    if (isBareUploadedFilename(value)) {
+        return `${BACKEND_URL}/uploads/${value}`;
+    }
+
+    return `${BACKEND_URL}/${value}`;
+}
+
+function resolveImageFallback(src) {
+    const value = normalizeImagePath(src);
+    if (!value) return "";
+
+    if (isBareUploadedFilename(value)) {
+        return `${BACKEND_URL}/uploads/${value}`;
+    }
+
+    return `${BACKEND_URL}/${value}`;
+}
+
+function resolveImageFallback(src) {
+    const value = normalizeImagePath(src);
+    if (!value) return "";
+    if (isBareUploadedFilename(value)) {
+        return `${BACKEND_URL}/uploads/${value}`;
+    }
+    return `${BACKEND_URL}/uploads/${value}`;
+}
+
+function imageErrorHandlerCode() {
+    return `
+        this.onerror=null;
+        const fallback=this.dataset.fallback||'';
+        if(fallback && this.src !== fallback){
+            this.src=fallback;
+            this.onerror=function(){
+                this.style.display='none';
+                if(this.nextElementSibling){ this.nextElementSibling.style.display='flex'; }
+            };
+            return;
+        }
+        this.style.display='none';
+        if(this.nextElementSibling){ this.nextElementSibling.style.display='flex'; }
+    `;
+}
+
+function formatDate(dateString) {
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return dateString;
+
+    return d.toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+function getUserFromMaxWebApp() {
+    const rawUser = app?.initDataUnsafe?.user || null;
+
+    if (rawUser && rawUser.id) {
+        return {
+            id: String(rawUser.id),
+            first_name: rawUser.first_name || "MAX",
+            last_name: rawUser.last_name || "",
+            username: rawUser.username || "",
+            photo_url: rawUser.photo_url || "",
+            language_code: rawUser.language_code || "ru"
+        };
+    }
+
+    return {
+        id: "guest_local",
+        first_name: "MAX",
+        last_name: "Клиент",
+        username: "guest",
+        photo_url: "",
+        language_code: "ru"
+    };
+}
+
+function getUserDisplayName(user) {
+    return [user.first_name, user.last_name].filter(Boolean).join(" ").trim() || "MAX Клиент";
+}
+
+function getUserTag(user) {
+    return user.username ? "@" + user.username : "id" + user.id;
+}
+
+function getUserOrdersStorageKey(userId) {
+    return `max_orders_user_${userId}`;
+}
+
+function getLocalOrders(userId) {
+    return JSON.parse(localStorage.getItem(getUserOrdersStorageKey(userId)) || "[]");
+}
+
+function setLocalOrders(userId, orders) {
+    localStorage.setItem(getUserOrdersStorageKey(userId), JSON.stringify(orders));
+}
+
+function generateOrderId() {
+    return `TMP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+}
+
+function isAdminUser() {
+    if (!currentUser) return false;
+
+    const userId = String(currentUser.id || "").trim();
+    const username = String(currentUser.username || "").trim().toLowerCase();
+
+    if (ADMIN_IDS.includes(userId)) return true;
+    if (username && ADMIN_USERNAMES.map(x => String(x).trim().toLowerCase()).includes(username)) return true;
+
+    return false;
+}
+
+function updateAdminPanelVisibility() {
+    const panel = document.getElementById("admin-panel");
+    if (!panel) return;
+    panel.style.display = isAdminUser() ? "block" : "none";
+}
+
+async function request(path, options = {}) {
+    const url = `${BACKEND_URL}${path}`;
+
+    const headers = {
+        "ngrok-skip-browser-warning": "true",
+        ...(options.headers || {})
+    };
+
+    let response;
+    try {
+        response = await fetch(url, {
+            method: options.method || "GET",
+            mode: "cors",
+            credentials: "omit",
+            cache: "no-store",
+            headers,
+            body: options.body
+        });
+    } catch (error) {
+        throw new Error(
+            `Не удалось подключиться к серверу ${BACKEND_URL}. Проверь backend, ngrok и CORS.`
+        );
+    }
+
+    const raw = await response.text();
+    let parsed = null;
+
+    try {
+        parsed = raw ? JSON.parse(raw) : null;
+    } catch {
+        parsed = raw;
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            (parsed && parsed.detail) ||
+            (parsed && parsed.message) ||
+            parsed ||
+            `HTTP ${response.status}`
+        );
+    }
+
+    return parsed;
+}
+
+async function apiGet(path) {
+    return request(path, { method: "GET" });
+}
+
+async function apiPost(path, payload, isFormData = false) {
+    if (isFormData) {
+        return request(path, {
+            method: "POST",
+            body: payload
+        });
+    }
+
+    return request(path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+}
+
+function renderHero() {
+    const root = document.getElementById("hero-block");
+    root.innerHTML =
+        HERO_BANNERS.map((item, index) => `
+            <div class="hero-slide ${index === heroIndex ? "active" : ""}" style="background-image:url('${resolveBannerImage(item.image)}'), linear-gradient(135deg, rgba(63,90,105,0.95), rgba(46,69,84,0.85));">
+                <div class="hero-content">
+                    <div class="hero-title">${item.title}</div>
+                    <div class="hero-text">${item.text}</div>
+                </div>
+            </div>
+        `).join("") +
+        `<div class="hero-dots">
+            ${HERO_BANNERS.map((_, index) => `<div class="hero-dot ${index === heroIndex ? "active" : ""}"></div>`).join("")}
+        </div>`;
+}
+
+function startHeroRotation() {
+    renderHero();
+    setInterval(() => {
+        heroIndex = (heroIndex + 1) % HERO_BANNERS.length;
+        renderHero();
+    }, 3500);
+}
+
+async function loadProducts() {
+    const loader = document.getElementById("products-loader");
+
+    try {
+        if (loader) loader.style.display = "block";
+
+        PRODUCTS = await apiGet("/api/products");
+
+        renderCats();
+        renderProducts();
+        updateCartUI();
+    } catch (e) {
+        console.error("ERROR LOAD:", e);
+        showAlert("Каталог не загрузился.\n\n" + e.message);
+    } finally {
+        if (loader) loader.style.display = "none";
+    }
+}
+
+function renderProfile() {
+    if (!currentUser) return;
+
+    document.getElementById("user-name").innerText = getUserDisplayName(currentUser);
+    document.getElementById("user-id").innerText = getUserTag(currentUser);
+
+    const avatarEl = document.getElementById("avatar");
+    if (currentUser.photo_url) {
+        avatarEl.innerHTML = `<img src="${escapeHTML(currentUser.photo_url)}" alt="avatar">`;
+    } else {
+        avatarEl.textContent = (currentUser.first_name || "?").charAt(0).toUpperCase();
+    }
+
+    document.getElementById("user-status").innerText = "MAX Premium Guest";
+
+    const profile = getCurrentReferralProfile();
+    const link = buildReferralLink();
+
+    document.getElementById("bonus-balance").innerText = `${Number(profile?.bonus_balance || 0)} ₽`;
+    document.getElementById("ref-code").innerText = profile?.code || "—";
+    document.getElementById("ref-link-box").innerText = link || "—";
+    document.getElementById("ref-invited-count").innerText = Number(profile?.invited_count || 0);
+    document.getElementById("ref-earned-total").innerText = `${Number(profile?.bonus_earned_total || 0)} ₽`;
+
+    updateAdminPanelVisibility();
+}
+
+function renderCats() {
+    const cats = ["Все", ...new Set(PRODUCTS.map(p => p.cat))];
+    document.getElementById("cat-nav").innerHTML = cats.map(c => `
+        <div class="cat-btn ${c === currentCat ? "active" : ""}" onclick="setCat('${String(c).replace(/'/g, "\\'")}')">${c}</div>
+    `).join("");
+}
+
+function setCat(c) {
+    currentCat = c;
+    renderCats();
+    renderProducts();
+}
+
+function renderProductImage(src, altText, cls = "p-img") {
+    const imgSrc = resolveImage(src);
+    const imgFallback = resolveImageFallback(src);
+
+    return `
+        <div class="p-img-wrap">
+            ${imgSrc ? `<img src="${escapeHTML(imgSrc)}" data-fallback="${escapeHTML(imgFallback)}" class="${cls}" alt="${escapeHTML(altText)}" onerror="${imageErrorHandlerCode()}">` : ""}
+            <div class="p-placeholder" style="${imgSrc ? "display:none;" : "display:flex;"}">Фото</div>
+        </div>
+    `;
+}
+
+function renderProducts() {
+    const grid = document.getElementById("product-grid");
+    const filtered = currentCat === "Все" ? PRODUCTS : PRODUCTS.filter(p => p.cat === currentCat);
+
+    grid.innerHTML = filtered.map(p => `
+        <div class="card" onclick="openProductModal(${p.id})">
+            ${renderProductImage(p.image, p.name)}
+            <div class="p-name serif">${escapeHTML(p.name)}</div>
+            <div class="p-pack">${escapeHTML(p.pack || "")}</div>
+            <div class="p-desc">${escapeHTML(p.desc || "")}</div>
+            <div class="p-price">${Number(p.price)} ₽</div>
+            <button class="add-btn" onclick="event.stopPropagation(); addToCart(${p.id})">В корзину</button>
+        </div>
+    `).join("");
+}
+
+function openProductModal(id) {
+    const p = PRODUCTS.find(x => Number(x.id) === Number(id));
+    if (!p) return;
+
+    currentProduct = p;
+    const img = resolveImage(p.image);
+    const fallback = resolveImageFallback(p.image);
+
+    document.getElementById("modal-img-wrap").innerHTML =
+        `${img ? `<img src="${escapeHTML(img)}" data-fallback="${escapeHTML(fallback)}" class="modal-img" alt="${escapeHTML(p.name)}" onerror="${imageErrorHandlerCode()}">` : ""}` +
+        `<div class="p-placeholder" style="${img ? "display:none;" : "display:flex;"}">Фото</div>`;
+
+    document.getElementById("modal-title").innerText = p.name;
+    document.getElementById("modal-pack").innerText = p.pack || "";
+    document.getElementById("modal-price").innerText = `${Number(p.price)} ₽`;
+    document.getElementById("modal-desc").innerText = p.desc || "";
+    document.getElementById("modal-kbju").innerText = p.kbju || "КБЖУ не указано";
+    document.getElementById("modal-add-btn").onclick = () => {
+        addToCart(p.id);
+        closeProductModal();
+    };
+
+    document.getElementById("product-modal").classList.add("active");
+}
+
+function closeProductModal(event) {
+    if (event && event.target && event.target.id !== "product-modal" && !event.target.classList.contains("modal-close")) return;
+    document.getElementById("product-modal").classList.remove("active");
+}
+
+function addToCart(id) {
+    const p = PRODUCTS.find(x => Number(x.id) === Number(id));
+    if (!p) return;
+
+    const item = cart.find(x => Number(x.id) === Number(id));
+    if (item) item.qty++;
+    else cart.push({ ...p, qty: 1 });
+
+    safeImpact("medium");
+    updateCartUI();
+    trackCartIfNeeded();
+}
+
+function changeQty(id, delta) {
+    const item = cart.find(x => Number(x.id) === Number(id));
+    if (!item) return;
+
+    item.qty += delta;
+    if (item.qty <= 0) {
+        cart = cart.filter(x => Number(x.id) !== Number(id));
+    }
+
+    updateCartUI();
+    trackCartIfNeeded();
+}
+
+function updateCartUI() {
+    localStorage.setItem(STORAGE_CART_KEY, JSON.stringify(cart));
+
+    const list = document.getElementById("cart-list");
+    const count = cart.reduce((s, i) => s + Number(i.qty), 0);
+    const rawTotal = getCartTotalRaw();
+    const bonusToUse = getBonusToUse();
+    const finalTotal = Math.max(0, rawTotal - bonusToUse);
+
+    const badge = document.getElementById("cart-badge");
+    badge.innerText = count;
+    badge.style.display = count > 0 ? "block" : "none";
+
+    document.getElementById("bonus-help-text").innerText = `Доступно ${getUserBonusBalance()} бонусных рублей`;
+    document.getElementById("bonus-toggle-wrap").style.display = rawTotal > 0 && getUserBonusBalance() > 0 ? "block" : "none";
+
+    if (cart.length > 0) {
+        document.getElementById("cart-empty").style.display = "none";
+        document.getElementById("checkout-block").style.display = "block";
+
+        list.innerHTML = cart.map(i => {
+            const img = resolveImage(i.image);
+            const fallback = resolveImageFallback(i.image);
+
+            return `
+                <div class="cart-item">
+                    <img src="${escapeHTML(img)}" data-fallback="${escapeHTML(fallback)}" class="cart-img" alt="${escapeHTML(i.name)}" onerror="this.onerror=null;if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.onerror=function(){this.style.display='none';this.insertAdjacentHTML('afterend','<div class=&quot;cart-img-placeholder&quot;>Фото</div>');};return;}this.style.display='none';this.insertAdjacentHTML('afterend','<div class=&quot;cart-img-placeholder&quot;>Фото</div>');">
+                    <div style="flex:1;">
+                        <h4 class="serif" style="margin:0 0 6px;">${escapeHTML(i.name)}</h4>
+                        <div style="font-size:11px; opacity:0.7; margin-bottom:4px;">${escapeHTML(i.pack || "")}</div>
+                        <div style="font-weight:600;">${Number(i.price)} ₽</div>
+                    </div>
+                    <div class="cart-ctrl">
+                        <button class="qty-btn" onclick="changeQty(${i.id}, -1)">-</button>
+                        <span style="font-weight:600;">${i.qty}</span>
+                        <button class="qty-btn" onclick="changeQty(${i.id}, 1)">+</button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        list.innerHTML += `
+            <div class="bonus-box" style="margin-top:8px;">
+                <div class="bonus-top">
+                    <div>
+                        <div class="bonus-label">Сумма заказа</div>
+                        <div class="bonus-value" style="font-size:22px;">${finalTotal} ₽</div>
+                    </div>
+                    <div style="text-align:right;font-size:12px;line-height:1.5;">
+                        <div>Товары: ${rawTotal} ₽</div>
+                        <div>Бонусы: -${bonusToUse} ₽</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        document.getElementById("cart-empty").style.display = "block";
+        document.getElementById("checkout-block").style.display = "none";
+        list.innerHTML = "";
+        document.getElementById("bonus-toggle-wrap").style.display = "none";
+        cartTracked = false;
+    }
+}
+
+function saveOrderLocally(order) {
+    const orders = getLocalOrders(order.user.id);
+    orders.unshift(order);
+    setLocalOrders(order.user.id, orders);
+}
+
+async function renderOrderHistory() {
+    if (!currentUser) return;
+
+    let orders = [];
+    try {
+        orders = await apiGet(`/api/orders/user/${encodeURIComponent(currentUser.id)}`);
+    } catch (e) {
+        orders = getLocalOrders(currentUser.id);
+    }
+
+    const list = document.getElementById("orders-history-list");
+    const empty = document.getElementById("orders-history-empty");
+
+    if (!orders.length) {
+        empty.style.display = "block";
+        list.innerHTML = "";
+        return;
+    }
+
+    empty.style.display = "none";
+    list.innerHTML = orders.map(order => `
+        <div class="history-card">
+            <div class="history-top">
+                <div>
+                    <div class="history-id">${escapeHTML(order.public_code || order.order_id)}</div>
+                    <div class="history-date">${formatDate(order.created_at)}</div>
+                </div>
+                <div class="history-total">${Number(order.total_after_bonus || order.total || 0)} ₽</div>
+            </div>
+            <div style="font-size:12px; line-height:1.5;">
+                ${(order.items || []).map(i => `• ${escapeHTML(i.name)} x ${i.qty}`).join("<br>")}
+            </div>
+            <div style="font-size:11px; margin-top:8px; opacity:.8;">${escapeHTML(order.pickup_time || '')}</div>
+            <div class="history-status">${escapeHTML(order.status_text || "Оформлен")}</div>
+        </div>
+    `).join("");
+}
+
+function buildOrderObject(phone, pickupTime, comment) {
+    const rawTotal = getCartTotalRaw();
+    const bonusUsed = getBonusToUse();
+    const totalAfterBonus = Math.max(0, rawTotal - bonusUsed);
+
+    return {
+        order_id: generateOrderId(),
+        created_at: new Date().toISOString(),
+        phone: phone.trim(),
+        address: "г. Тула, Щегловская засека, 25",
+        pickup_time: pickupTime.trim(),
+        comment: comment.trim(),
+        total: totalAfterBonus,
+        total_before_bonus: rawTotal,
+        total_after_bonus: totalAfterBonus,
+        bonus_used: bonusUsed,
+        status: "sent_to_admin",
+        status_text: "Оформлен",
+        user: {
+            id: currentUser.id,
+            first_name: currentUser.first_name,
+            last_name: currentUser.last_name,
+            username: currentUser.username,
+            photo_url: currentUser.photo_url
+        },
+        referral: {
+            my_code: getCurrentReferralProfile()?.code || "",
+            incoming_code: currentReferralCode || ""
+        },
+        items: cart.map(i => ({
+            id: i.id,
+            cat: i.cat,
+            name: i.name,
+            price: Number(i.price),
+            qty: Number(i.qty),
+            image: i.image || "",
+            pack: i.pack || ""
+        }))
+    };
+}
+
+async function finalizeOrder() {
+    const phone = document.getElementById("f-phone").value.trim();
+    const pickupTime = document.getElementById("f-pickup-time").value.trim();
+    const comment = document.getElementById("f-comment").value.trim();
+
+    if (!phone) {
+        safeNotify("warning");
+        return showAlert("Укажите телефон для связи");
+    }
+
+    if (!pickupTime) {
+        safeNotify("warning");
+        return showAlert("Выберите время самовывоза");
+    }
+
+    if (!cart.length) {
+        safeNotify("warning");
+        return showAlert("Корзина пуста");
+    }
+
+    const order = buildOrderObject(phone, pickupTime, comment);
+
+    try {
+        const result = await apiPost("/api/orders/create", {
+            order,
+            initData: app?.initData || "",
+            initDataUnsafe: app?.initDataUnsafe || null
+        });
+
+        order.order_id = result?.order_id || order.order_id;
+        order.public_code = result?.public_code || order.order_id;
+        order.status_text = "Оформлен";
+
+        saveOrderLocally(order);
+        spendBonuses(order.bonus_used || 0);
+        applyReferralRewardIfNeeded(order.total_before_bonus || order.total);
+
+        await renderOrderHistory();
+        renderProfile();
+        safeNotify("success");
+
+        cart = [];
+        localStorage.setItem(STORAGE_CART_KEY, JSON.stringify(cart));
+        updateCartUI();
+        switchTab("shop-view", document.querySelector(".nav-item"));
+
+        document.getElementById("f-comment").value = "";
+        const bonusCheckbox = document.getElementById("use-bonus-checkbox");
+        if (bonusCheckbox) bonusCheckbox.checked = false;
+
+        showAlert(
+            `Заказ оформлен.\n\nКод заказа: ${result?.public_code || result?.order_id || order.order_id}\nСумма: ${Number(order.total_after_bonus || order.total)} ₽`
+        );
+    } catch (e) {
+        console.error("SEND ORDER FAILED:", e);
+        safeNotify("error");
+        showAlert("Заказ не отправлен.\n\n" + e.message);
+    }
+}
+
+async function exportOrdersCSV() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/orders/export-csv/download`, {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit",
+            cache: "no-store",
+            headers: {
+                "ngrok-skip-browser-warning": "true"
+            }
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `orders_export_${Date.now()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    } catch (e) {
+        showAlert("CSV не выгружен.\n\n" + e.message);
+    }
+}
+
+async function copyReferralLink() {
+    const link = buildReferralLink();
+    if (!link) return showAlert("Ссылка пока недоступна");
+
+    try {
+        await navigator.clipboard.writeText(link);
+        safeNotify("success");
+        showAlert("Ссылка скопирована");
+    } catch (e) {
+        showAlert("Не удалось скопировать ссылку");
+    }
+}
+
+function shareReferralLink() {
+    const link = buildReferralLink();
+    if (!link) return showAlert("Ссылка пока недоступна");
+
+    const text = `Присоединяйся к магазину Рыбная Точка. Вот моя реферальная ссылка: ${link}`;
+
+    if (app?.shareMaxContent) {
+        app.shareMaxContent({ text });
+        return;
+    }
+
+    if (navigator.share) {
+        navigator.share({ text, url: link }).catch(() => {});
+        return;
+    }
+
+    copyReferralLink();
+}
+
+function switchTab(id, el) {
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+
+    const target = document.getElementById(id);
+    if (target) target.classList.add("active");
+    if (el) el.classList.add("active");
+
+    if (id === "profile-view") {
+        renderProfile();
+        renderOrderHistory();
+    }
+
+    safeSelection();
+}
+
+function preloadCheckoutData() {
+    if (!currentUser) return;
+    const orders = getLocalOrders(currentUser.id);
+    if (orders.length) {
+        const lastOrder = orders[0];
+        if (lastOrder.phone) document.getElementById("f-phone").value = lastOrder.phone;
+        if (lastOrder.pickup_time) document.getElementById("f-pickup-time").value = lastOrder.pickup_time;
+    }
+}
+
+function fillPickupSlots() {
+    const select = document.getElementById("f-pickup-time");
+    if (!select) return;
+
+    select.innerHTML =
+        `<option value="">Выберите время самовывоза</option>` +
+        PICKUP_SLOTS.map(slot => `<option value="${escapeHTML(slot)}">${slot}</option>`).join("");
+}
+
+async function trackVisit() {
+    try {
+        const sessionId = sessionStorage.getItem("fish_session_id") || (() => {
+            const id = `${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+            sessionStorage.setItem("fish_session_id", id);
+            return id;
+        })();
+
+        await apiPost("/api/analytics/visit", {
+            user_id: currentUser.id,
+            username: currentUser.username,
+            user_name: getUserDisplayName(currentUser),
+            session_id: sessionId
+        });
+    } catch (e) {
+        console.warn(e);
+    }
+}
+
+async function trackCartIfNeeded() {
+    if (cartTracked || !cart.length || !currentUser) return;
+    cartTracked = true;
+
+    try {
+        await apiPost("/api/analytics/cart", {
+            user_id: currentUser.id,
+            items_count: cart.reduce((s,i) => s + Number(i.qty), 0),
+            total: getCartTotalRaw()
+        });
+    } catch (e) {
+        console.warn(e);
+    }
+}
+
+function openAdminPanel() {
+    window.open(`admin.html?backend=${encodeURIComponent(BACKEND_URL)}`, "_blank");
+}
+
+async function checkBackendHealth() {
+    try {
+        const result = await apiGet("/api/health");
+        console.log("BACKEND OK:", BACKEND_URL, result);
+        return true;
+    } catch (e) {
+        console.error("BACKEND HEALTH FAILED:", e);
+        return false;
+    }
+}
+
+async function init() {
+    currentUser = getUserFromMaxWebApp();
+    ensureReferralProfile(currentUser);
+    maybeSaveReferralAttribution();
+    fillPickupSlots();
+    renderProfile();
+    updateCartUI();
+    preloadCheckoutData();
+    startHeroRotation();
+
+    const healthOk = await checkBackendHealth();
+    if (!healthOk) {
+        showAlert(
+            "Сервер недоступен.\n\n" +
+            "Проверь, что backend запущен, ngrok активен и адрес правильный.\n\n" +
+            `Текущий backend: ${BACKEND_URL}`
+        );
+        return;
+    }
+
+    await loadProducts();
+    await renderOrderHistory();
+    await trackVisit();
+    if (cart.length) await trackCartIfNeeded();
+}
+
+init();
+</script>
+</body>
+</html>
